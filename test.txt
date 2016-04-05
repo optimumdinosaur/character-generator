@@ -1,0 +1,101 @@
+Test Character
+Level 10 Kobold Druid
+HP: 62
+Ability Scores
+Str 8 (-1)
+Dex 9 (-1)
+Con 14 (2)
+Int 8 (-1)
+Wis 18 (4)
+Cha 12 (1)
+
+Armor Class 15	(Touch 10 / Flat-Footed 15)
+Fort +9
+Ref +2
+Will +11
+BAB +7
+
+Spells per Day: [4, 5, 5, 4, 4, 2]
+Spells Prepared: 
+['Resistance', 'Know Direction', 'Light', 'Know Direction']
+['Endure Elements', 'Charm Animal', 'Hide from Animals', 'Magic Stone', 'Shiellelagh']
+["Bear's Endurance", "Cat's Grace", "Bull's Strength", 'Lesser Restoration', 'Hold Animal']
+['Meld into Stone', 'Contagion', 'Diminish Plants', 'Wind Wall']
+['Flame Strike', 'Plague Carrier', 'Ice Storm', 'Control Water']
+['Tree Stride', 'Baleful Polymorph']
+[]
+[]
+[]
+[]
+
+Heal: 17
+Handle Animal: 14
+Spellcraft: 12
+Perception: 6
+Profession(Miner): 6
+Survival: 4
+Sense Motive: 4
+Profession: 4
+Autohypnosis: 4
+Bluff: 1
+Disguise: 1
+Diplomacy: 1
+Perform: 1
+Swim: 1
+Use Psionic Device: 1
+Climb: 1
+Craft(Trapmaking): 1
+Use Magic Device: 1
+Intimidate: 1
+Knowledge(Nature): -1
+Psicraft: -1
+Knowledge(Psionics): -1
+Craft: -1
+Knowledge(Religion): -1
+Knowledge(Nobility): -1
+Knowledge(Engineering): -1
+Knowledge(Local): -1
+Appraise: -1
+Knowledge(Dungeoneering): -1
+Knowledge(Planar): -1
+Martial Lore: -1
+Knowledge(History): -1
+Knowledge(Arcana): -1
+Knowledge(Geography): -1
+Linguistics: -1
+Ride: -2
+Sleight of Hand: -2
+Escape Artist: -2
+Acrobatics: -2
+Disable Device: -2
+Stealth: -2
+Fly: -2
+
+Special: 
+Scaly Skin
+Crafty
+Darkvision 60 feet
+Light Sensitivity
+Nature Bond: Animal Companion
+Manta Ray Companion
+Nature Sense
+Wild Empathy
+Woodland Stride
+Trackless Step
+Resist Nature's Lure
+Wild Shape (4/day)
+Venom Immunity
+
+Feats: 
+Vital Strike
+Toughness
+Fleet
+Lunge
+Quick Draw
+Improved Initiative
+
+Equipment: {'Armor': '+2 Hide Armor', 'Off Hand': ['Hand', 20, 2], 'Main Hand': '+3 Dagger'}
+
+Languages: ['Draconic']
+
+Tags: set(['Natural', 'Spellcaster', 'Druid Armor', 'Prepared'])
