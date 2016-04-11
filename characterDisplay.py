@@ -217,7 +217,7 @@ class theGUI(Tkinter.Tk):
 		roll = random.randint(1,20)
 		skillWithBonus = str(self.skillBox.get(Tkinter.ACTIVE))
 		skillName = skillWithBonus[:skillWithBonus.index('+')]
-		skillBonus = int(skillWithBonus[skillWithBonus.index('+'):])
+		skillBonus = int(skillWithBonus[skillWithBonus.index('+')+1:])
 		finalRoll = roll + skillBonus
 		self.skillLabelString.set('Roll {} : {} ({} + {})'.format(skillName, finalRoll, roll, skillBonus))
 
@@ -580,10 +580,10 @@ class theGUI(Tkinter.Tk):
 			self.skillBox.insert(Tkinter.END, '{} +{}'.format(item[0], item[1]))
 
 		skillButton = Tkinter.Button(self, text='Roll Skill', command=self.rollSkill)
-		skillButton.grid(column=2, row=15)
+		skillButton.grid(column=2, row=15, sticky=Tkinter.E)
 		self.skillLabelString = Tkinter.StringVar()
 		skillLabel = Tkinter.Label(self, textvariable=self.skillLabelString)
-		skillLabel.grid(column=0, row=15)
+		skillLabel.grid(column=0, row=15, columnspan=3, sticky=Tkinter.W)
 
 		writeButton = Tkinter.Button(self, text='Write Character to {}.txt'.format(test.name), command=self.writeCharacter)
 		writeButton.grid(column=0, row=16)
