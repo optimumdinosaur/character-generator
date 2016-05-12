@@ -1,6 +1,7 @@
 import characterGenerator
 import Tkinter
 import tkMessageBox
+import tkFileDialog
 import random
 import operator
 
@@ -129,13 +130,125 @@ class theGUI(Tkinter.Tk):
 
 
 		self.generateButton = Tkinter.Button(self, text='Generate a Character', command=self.generateCharacter)
-		self.generateButton.grid(column=0, row=16, columnspan=3)
+		self.generateButton.grid(column=0, row=16, columnspan=3, pady=20)
+
+		self.loadButton = Tkinter.Button(self, text='Load a Character', command=self.loadCharacter)
+		self.loadButton.grid(column=0, row=17, columnspan=3, pady=5)
 
 
 		self.grid_columnconfigure(0,weight=1)
 		self.resizable(True, True)
 		self.update()
 		self.geometry(self.geometry())
+
+
+	# callback function for loadButton
+	# loads a character from a file and then displays it
+	def loadCharacter(self):
+		fTypes = [('D&D Character Sheets', '*.ddc'), ('All files', '*')]
+		dlg = tkFileDialog.Open(self, filetypes=fTypes)
+		fl = dlg.show()
+
+		if fl != '':
+			# once we've got the sheet, we can start parsing it and adding attributes to test
+			with open(fl) as f: # i put the file into a list so I can parse it easier
+				sheet = f.readlines()
+
+			test.name = sheet[0].rstrip()
+
+			test.level = int(sheet[1][6:7])
+			raceAndName = str(sheet[1][8:])
+			spcIndex = raceAndName.find(' ')
+			test.race = raceAndName[0:spcIndex].rstrip()
+			test.clas = raceAndName[spcIndex+1:].rstrip()
+		
+			test.hitPoints = int(sheet[2][4:])
+
+			test.strength = int(sheet[4][4:6])
+			test.strMod = int(sheet[4][8])
+
+			test.dexterity = int(sheet[5][4:6])
+			test.dexMod = int(sheet[5][8])
+
+			test.constitution = int(sheet[6][4:6])
+			test.conMod = int(sheet[6][8])
+
+			test.intelligence = int(sheet[7][4:6])
+			test.intMod = int(sheet[7][8])
+
+			test.wisdom = int(sheet[8][4:6])
+			test.wisMod = int(sheet[8][8])
+
+			test.charisma = int(sheet[9][4:6])
+			test.chaMod = int(sheet[9][8])
+
+			test.armorClass = int(sheet[11][12:14])
+			test.touchArmorClass = int(sheet[11][22:24])
+			test.flatFootedArmorClass = int(sheet[11][39:41])
+
+			test.fortSave = int(sheet[12][6:])
+			test.refSave = int(sheet[13][5:])
+			test.willSave = int(sheet[14][6:])
+
+			test.BAB = int(sheet[15][5:])
+
+			specialIndex = sheet.index('Special: \n')
+			endSpecialIndex = sheet.index('ENDSPECIAL\n')
+			numOfSpecial = endSpecialIndex - specialIndex - 1
+			for i in xrange(numOfSpecial):
+				test.specialList.append(sheet[specialIndex+i+1].rstrip())
+
+			featIndex = sheet.index('Feats: \n')
+			endFeatIndex = sheet.index('ENDFEATS\n')
+			numOfFeats = endFeatIndex - featIndex - 1
+			for i in xrange(numOfFeats):
+				test.featList.append(sheet[featIndex+i+1].rstrip())
+
+			skillIndex = sheet.index('Skills: \n')
+			endSkillIndex = sheet.index('ENDSKILLS\n')
+			numOfSkills = endSkillIndex - skillIndex - 1
+			for i in xrange(numOfSkills):
+				currLine = sheet[skillIndex + i + 1]
+				colonIndex = currLine.find(':')
+				test.skillBonus[currLine[:colonIndex]] = int(currLine[colonIndex+1:])
+
+			# i need a way to determine which moveBox to use. I guess I could just look for the list of moves in the file
+			# i could just look at the character's class and from there decide how to do stuff
+			if test.clas == 'Crusader' or test.clas == 'Swordsage' or test.clas == 'Warblade':
+				test.tags.update(['Martial Adept'])
+				maneuverIndex = sheet.index('Maneuvers Known: \n')
+				endManeuverIndex = sheet.index('ENDMANEUVERSKNOWN\n')
+				numOfManeuvers = endManeuverIndex - maneuverIndex - 1
+				test.maneuverList = []
+				for i in xrange(numOfManeuvers):
+					test.maneuverList.append(sheet[maneuverIndex+i+1])
+				if test.clas == 'Swordsage' or test.clas == 'Warblade':
+					manReadyLine = sheet[maneuverIndex - 1]
+					test.maneuversReadied = int(manReadyLine[manReadyLine.find(':')+1:])
+				
+				stanceIndex = sheet.index('Stances Known: \n')
+				endStanceIndex = sheet.index('ENDSTANCES\n')
+				numOfStances = endStanceIndex - stanceIndex - 1
+				test.stanceList = []
+				for i in xrange(numOfStances):
+					test.stanceList.append(sheet[stanceIndex+1+i])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			self.displayCharacter()
+
+
 
 
 	# callback function for the generateButton
@@ -210,8 +323,8 @@ class theGUI(Tkinter.Tk):
 		self.displayCharacter()
 
 	def writeCharacter(self):
-		test.writeCharacterToFile('{}.txt'.format(test.name))
-		tkMessageBox.showinfo('Character Saved', 'Character successfully saved to {}.txt!'.format(test.name))
+		test.writeCharacterToFile('{}.ddc'.format(test.name))
+		tkMessageBox.showinfo('Character Saved', 'Character successfully saved to {}.ddc!'.format(test.name))
 
 	def rollSkill(self):
 		roll = random.randint(1,20)
@@ -585,8 +698,8 @@ class theGUI(Tkinter.Tk):
 		skillLabel = Tkinter.Label(self, textvariable=self.skillLabelString)
 		skillLabel.grid(column=0, row=15, columnspan=3, sticky=Tkinter.W)
 
-		writeButton = Tkinter.Button(self, text='Write Character to {}.txt'.format(test.name), command=self.writeCharacter)
-		writeButton.grid(column=0, row=16)
+		writeButton = Tkinter.Button(self, text='Write Character to {}.ddc'.format(test.name), command=self.writeCharacter)
+		writeButton.grid(column=0, row=16, columnspan=3, sticky=Tkinter.W)
 
 		self.grid_columnconfigure(0,weight=1)
 		self.resizable(False,False)

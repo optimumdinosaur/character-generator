@@ -411,7 +411,7 @@ class Character(object):
 			elif goodStats[0] == goodStats[2] == goodStats[5] == 1: # good Str, Con, and Cha
 				self.clas = 'Paladin'
 				return self.clas
-			elif goodStats[0] == goodStats[1] == goodStats[4] == 1:
+			elif goodStats[0] == goodStats[1] == goodStats[4] == 1: # good Str, Dex, and Wis
 				self.clas = 'Ranger'
 				return self.clas
 			# else:
@@ -437,7 +437,7 @@ class Character(object):
 			elif goodStats[1] == goodStats[5] == 1: # Dex, Cha
 				self.clas = 'Dread Necromancer'
 				return self.clas
-			elif goodStats[2] == goodStats[4] == 1:
+			elif goodStats[2] == goodStats[4] == 1: # Con, Wis
 				self.clas = 'Druid'
 				return self.clas
 			# else:
@@ -4497,7 +4497,11 @@ class Character(object):
 			outFile.write('Maneuvers Known: \n')
 			for i in xrange(len(self.maneuverList)):
 				outFile.write('{}\n'.format(self.maneuverList[i]))
-			outFile.write('Stances Known: {}\n'.format(self.stanceList))
+			outFile.write('ENDMANEUVERSKNOWN\n')
+			outFile.write('Stances Known: \n')
+			for i in xrange(len(self.stanceList)):
+				outFile.write('{}\n'.format(self.stanceList[i]))
+			outFile.write('ENDSTANCES\n')
 		if 'Psionic' in self.tags:
 			outFile.write('Power Points: {}\n'.format(self.powerPoints))
 			outFile.write('Powers Known: \n')
@@ -4516,16 +4520,20 @@ class Character(object):
 		outFile.write('\n')
 		sortedSkills = sorted(self.skillBonus.items(), key=operator.itemgetter(1))
 		sortedSkills.reverse()
+		outFile.write('Skills: \n')
 		for i in sortedSkills:
 			outFile.write('{}: {}\n'.format(i[0], i[1]))
+		outFile.write('ENDSKILLS\n')
 		outFile.write('\n')
 		outFile.write('Special: \n')
 		for i in xrange(len(self.specialList)):
 			outFile.write('{}\n'.format(self.specialList[i]))
+		outFile.write('ENDSPECIAL\n')
 		outFile.write('\n')
 		outFile.write('Feats: \n')
 		for i in xrange(len(self.featList)):
 			outFile.write('{}\n'.format(self.featList[i]))
+		outFile.write('ENDFEATS\n')
 		outFile.write('\n')
 		outFile.write('Equipment: {}\n'.format(self.equipment))
 		outFile.write('\n')
