@@ -2905,15 +2905,15 @@ class Character(object):
 
 		if self.clas == 'Beguiler':
 			for i in xrange(len(self.spellsPerDay)+1): # +1 b/c cantrips
-				self.spellList.append(beguilerSpells[i])
+				self.spellList.append('{} ({})'.format(beguilerSpells[i]), i)
 					
 		if self.clas == 'Dread Necromancer':
 			for i in xrange(len(self.spellsPerDay)): # dread necros dont have cantrips
-				self.spellList.append(dreadNecroSpells[i])
+				self.spellList.append('{} ({})'.format(dreadNecroSpells[i]), i)
 
 		if self.clas == 'Warmage':
 			for i in xrange(len(self.spellsPerDay)+1): # +1 b/c cantrips
-				self.spellList.append(warmageSpells[i])
+				self.spellList.append('{} ({})'.format(warmageSpells[i]), i)
 
 	# function to handle the Advanced Learning class feature in Beguiler, Dread Necromancer, and Warmage
 	def advancedLearning(self,spellLevel):
@@ -4670,10 +4670,6 @@ class Character(object):
 		self.getEquipment()
 		self.finalCheck()
 
-
-# rangerMan = Character('Ranger-Man', 20)
-# rangerMan.buildACharacterOfClass('Ranger')
-# rangerMan.writeCharacterToFile('rangerMan.txt')
 
 
 # print 'Beginning generation of gang of kobolds...'

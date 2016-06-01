@@ -156,12 +156,16 @@ class theGUI(Tkinter.Tk):
 
 			test.name = sheet[0].rstrip()
 
-			test.level = int(sheet[1][6:7])
-			raceAndName = str(sheet[1][8:])
-			spcIndex = raceAndName.find(' ')
-			test.race = raceAndName[0:spcIndex].rstrip()
-			test.clas = raceAndName[spcIndex+1:].rstrip()
+			test.level = int(sheet[1][6:8])
+			raceAndClass = str(sheet[1][9:-1])
+			spcIndex = raceAndClass.find(' ')
+			test.race = raceAndClass[0:spcIndex].rstrip()
+			test.clas = raceAndClass[spcIndex+1:].rstrip()
 		
+			print "raceAndClass: '{}'".format(raceAndClass)
+			print "Race loaded as: '{}'".format(test.race)
+			print "Class loaded as: '{}'".format(test.clas)
+
 			test.hitPoints = int(sheet[2][4:])
 
 			test.strength = int(sheet[4][4:6])
@@ -230,14 +234,96 @@ class theGUI(Tkinter.Tk):
 				endStanceIndex = sheet.index('ENDSTANCES\n')
 				numOfStances = endStanceIndex - stanceIndex - 1
 				test.stanceList = []
+
 				for i in xrange(numOfStances):
 					test.stanceList.append(sheet[stanceIndex+1+i])
 
+			# spellcasters		
+			elif test.clas == 'Bard' or test.clas == 'Druid' or test.clas == 'Dread Necromancer' or test.clas == 'Beguiler' or test.clas == 'Warmage' or test.clas == 'Ranger' or test.clas == 'Paladin':
+				test.tags.update(['Spellcaster'])
+
+				spellsPerDayLine = sheet[17]
+				test.spellsPerDay = spellsPerDayLine[spellsPerDayLine.find('[')+1:spellsPerDayLine.find(']')].split(', ')
+
+				print test.spellsPerDay
+				endSpellIndex = sheet.index('ENDSPELLS\n')
+
+				# Prepared
+				if test.clas == 'Druid' or test.clas == 'Ranger' or test.clas == 'Paladin':
+					spellPreparedIndex = sheet.index('Spells Prepared: \n')
+					numOfSpells = endSpellIndex - spellPreparedIndex - 1
+					test.tags.update(['Prepared'])
+					if test.clas == 'Druid':
+						test.spellsPrepared = [[], [], [], [], [], [], [], [], [], []]
+					else: # else we assume you're a ranger or paladin
+						test.spellsPrepared = [[], [], [], []]
+
+					print 'Spells loaded as:'
+					for i in xrange(numOfSpells):
+						spell = sheet[spellPreparedIndex+i+1]
+						level = int(spell[-3])
+						spell = spell[:spell.find('(')-1]
+						test.spellsPrepared[level].append(spell)
+
+				# Spontaneous
+				elif test.clas == 'Bard' or test.clas == 'Dread Necromancer' or test.clas == 'Beguiler' or test.clas == 'Warmage':
+					spellKnownIndex = sheet.index('Spells Known: \n')
+					numOfSpells = endSpellIndex - spellKnownIndex - 1
+					test.tags.update(['Spontaneous'])
+
+					if test.clas == 'Bard':
+						test.spellList = [[], [], [], [], [], [], []]
+					elif test.clas == 'Beguiler':
+						test.spellList = []
+						for i in xrange(len(test.spellsPerDay)+1):
+							test.spellList.append(characterGenerator.beguilerSpells[i])
+					elif test.clas == 'Dread Necromancer':
+						test.spellList = []
+						for i in xrange(len(test.spellsPerDay)):
+							test.spellList.append(characterGenerator.dreadNecroSpells[i])
+					elif test.clas == 'Warmage':
+						test.spellList = []
+						for i in xrange(len(test.spellsPerDay)+1):
+							test.spellList.append(characterGenerator.warmageSpells[i])
+
+					print 'Spells loaded as: '
+					for i in xrange(numOfSpells):
+						spell = sheet[spellKnownIndex+i+1]
+						level = int(spell[-3])
+						spell = spell[:spell.find('(')-1]
+						test.spellList[level].append(spell)
+							
 
 
 
 
 
+			elif test.clas == 'Ardent' or test.clas == 'Psion' or test.clas == 'Wilder':
+				test.tags.update(['Psionic'])
+				powerIndex = sheet.index('Powers Known: \n')
+				endPowerIndex = sheet.index('ENDPOWERS\n')
+				numOfPowers = endPowerIndex - powerIndex - 1
+				test.powerList = []
+				for i in xrange(numOfPowers):
+					test.powerList.append(sheet[powerIndex+i+1])
+				ppLine = sheet[powerIndex - 1]
+				test.powerPoints = int(ppLine[ppLine.find(':')+1:])
+
+			elif test.clas == 'Barbarian':
+				test.ragePowers = []
+				rageIndex = sheet.index('Rage Powers: \n')
+				endRageIndex = sheet.index('ENDRAGEPOWERS\n')
+				numofRagePowers = endRageIndex - rageIndex - 1
+				for i in xrange(numofRagePowers):
+					test.ragePowers.append(sheet[rageIndex+i+1])
+
+			elif test.clas == 'Rogue':
+				talentIndex = sheet.index('Rogue Talents: \n')
+				endTalentIndex = sheet.index('ENDROGUETALENTS\n')
+				numOfRogueTalents = endTalentIndex - talentIndex - 1
+				test.rogueTalents = []
+				for i in xrange(numOfRogueTalents):
+					test.rogueTalents.append(sheet[talentIndex+i+1])
 
 
 
@@ -323,8 +409,124 @@ class theGUI(Tkinter.Tk):
 		self.displayCharacter()
 
 	def writeCharacter(self):
-		test.writeCharacterToFile('{}.ddc'.format(test.name))
-		tkMessageBox.showinfo('Character Saved', 'Character successfully saved to {}.ddc!'.format(test.name))
+		outFile = tkFileDialog.asksaveasfile(mode = 'w', defaultextension='.ddc', filetypes=[('D&D Character Sheets', '*.ddc'), ('All Files', '*')]) # .ddc = dungeons & dragons character
+
+		if outFile is None:
+			return
+
+
+		outFile.write('{}\n'.format(test.name))
+		outFile.write('Level {} {} {}\n'.format(test.level, test.race, test.clas))
+		outFile.write('HP: {}\n'.format(test.hitPoints))
+		outFile.write('Ability Scores\n')
+		outFile.write('Str {} ({})\n'.format(test.strength, test.strMod))
+		outFile.write('Dex {} ({})\n'.format(test.dexterity, test.dexMod))
+		outFile.write('Con {} ({})\n'.format(test.constitution, test.conMod))
+		outFile.write('Int {} ({})\n'.format(test.intelligence, test.intMod))
+		outFile.write('Wis {} ({})\n'.format(test.wisdom, test.wisMod))
+		outFile.write('Cha {} ({})\n'.format(test.charisma, test.chaMod))
+		outFile.write('\n')
+		outFile.write('Armor Class {}	(Touch {} / Flat-Footed {})\n'.format(test.armorClass, test.touchArmorClass, test.flatFootedArmorClass))
+		outFile.write('Fort +{}\n'.format(test.fortSave))
+		outFile.write('Ref +{}\n'.format(test.refSave))
+		outFile.write('Will +{}\n'.format(test.willSave))
+		outFile.write('BAB +{}\n'.format(test.BAB))
+
+
+		# this is where im going to have to write the character's basic attack form
+		# Need a single attack, and full attack displayed
+		# but only if the character has the appropriate tags: Melee or Ranged Attacker
+		# if 'Melee' in test.tags or 'Ranged Attacker' in test.tags:
+		# 	parsedWeapon = test.equipment['Main Hand'][3:]
+		# 	weaponBonus = int(test.equipment['Main Hand'][1])
+		# 	weaponDamage = characterGenerator.weapons[parsedWeapon][0]
+		# 	numOfDice = int(weaponDamage[0])
+		# 	dieSize = int(weaponDamage[2:])
+		# 	attackBonus = weaponBonus + test.BAB
+		# 	damageBonus = test.strMod + weaponBonus
+		# 	if 'Weapon Finesse' in test.featList or 'Ranged Attacker' in test.tags:
+		# 		attackBonus += test.dexMod
+		# 	else:
+		# 		attackBonus += test.strMod
+		# 	if 'Weapon Focus' in test.featList:
+		# 		attackBonus += 1
+		# 	if 'Weapon Specialization' in test.featList:
+		# 		damageBonus += 2
+		# 	if 'Big Weapon' in test.tags: # 2 handed
+		# 		damageBonus += int(0.5 * test.strMod)
+		# 	outFile.write('Basic Attack: {} +{} ATK {}d{}+{} {}-20/x{}\n'.format(parsedWeapon, attackBonus, numOfDice, dieSize, damageBonus, characterGenerator.weapons[parsedWeapon][1], characterGenerator.weapons[parsedWeapon][2]))
+
+		outFile.write('\n')
+
+		if 'Spellcaster' in test.tags:
+			outFile.write('Spells per Day: {}\n'.format(test.spellsPerDay))
+			if 'Spontaneous' in test.tags:
+				outFile.write('Spells Known: \n')
+				for i in xrange(len(test.spellList)):
+					for spell in test.spellList[i]:
+						outFile.write('{} ({})\n'.format(spell, i))
+			if 'Prepared' in test.tags:
+				outFile.write('Spells Prepared: \n')
+				for i in xrange(len(test.spellsPrepared)):
+					for spell in test.spellsPrepared[i]:
+						outFile.write('{} ({})\n'.format(spell, i))
+		outFile.write('ENDSPELLS\n')
+		if test.clas == 'Barbarian':
+			 outFile.write('Rage Powers: \n')
+			 for i in xrange(len(test.ragePowers)):
+			 	outFile.write('{}\n'.format(test.ragePowers[i]))
+			 outFile.write('ENDRAGEPOWERS\n')
+		if test.clas == 'Rogue':
+			outFile.write('Rogue Talents: \n')
+			for i in xrange(len(test.rogueTalents)):
+				outFile.write('{}\n'.format(test.rogueTalents[i]))
+			outFile.write('ENDROGUETALENTS\n')
+		if 'Martial Adept' in test.tags:
+			outFile.write('NumOf Maneuvers Readied: {}\n'.format(test.maneuversReadied))
+			outFile.write('Maneuvers Known: \n')
+			for i in xrange(len(test.maneuverList)):
+				outFile.write('{}\n'.format(test.maneuverList[i]))
+			outFile.write('ENDMANEUVERSKNOWN\n')
+			outFile.write('Stances Known: \n')
+			for i in xrange(len(test.stanceList)):
+				outFile.write('{}\n'.format(test.stanceList[i]))
+			outFile.write('ENDSTANCES\n')
+		if 'Psionic' in test.tags:
+			outFile.write('Power Points: {}\n'.format(test.powerPoints))
+			outFile.write('Powers Known: \n')
+			for i in xrange(len(test.powerList)):
+				outFile.write('{}\n'.format(test.powerList[i]))
+			outFile.write('ENDPOWERS\n')
+		if test.clas == 'Ranger':
+			outFile.write('Favored Terrains: {}\n'.format(test.favoredTerrains))
+			outFile.write('Favored Enemies: {}\n'.format(test.favoredEnemies))
+		outFile.write('\n')
+		sortedSkills = sorted(test.skillBonus.items(), key=operator.itemgetter(1))
+		sortedSkills.reverse()
+		outFile.write('Skills: \n')
+		for i in sortedSkills:
+			outFile.write('{}: {}\n'.format(i[0], i[1]))
+		outFile.write('ENDSKILLS\n')
+		outFile.write('\n')
+		outFile.write('Special: \n')
+		for i in xrange(len(test.specialList)):
+			outFile.write('{}\n'.format(test.specialList[i]))
+		outFile.write('ENDSPECIAL\n')
+		outFile.write('\n')
+		outFile.write('Feats: \n')
+		for i in xrange(len(test.featList)):
+			outFile.write('{}\n'.format(test.featList[i]))
+		outFile.write('ENDFEATS\n')
+		outFile.write('\n')
+		outFile.write('Equipment: {}\n'.format(test.equipment))
+		outFile.write('\n')
+		outFile.write('Languages: {}\n'.format(test.languagesKnown))
+		outFile.write('\n')
+		outFile.write('Tags: {}\n'.format(test.tags))
+
+		outFile.close()
+
+		tkMessageBox.showinfo('Character Saved', 'Character successfully saved!')
 
 	def rollSkill(self):
 		roll = random.randint(1,20)
@@ -364,6 +566,14 @@ class theGUI(Tkinter.Tk):
 			self.atkResultString.set('Attack Roll: {} ({}) : Damage: {} ({}+{})'.format(atkResult, natAtkRoll, damage, damageRolls, self.damageBonus))
 
 
+	def goBack(self):
+
+		for widget in self.winfo_children():
+			widget.destroy()
+
+		self.initialize()
+
+
 	def displayCharacter(self):
 		heightSM = 12 # height of skill and move boxes
 		widthSM = 35 # width of skill and move boxes
@@ -371,6 +581,9 @@ class theGUI(Tkinter.Tk):
 		for widget in self.winfo_children():
 			widget.destroy()
 
+
+		backButton = Tkinter.Button(self, text='<--', command=self.goBack)
+		backButton.grid(column=0, row=0, sticky=Tkinter.W)
 
 
 		self.nameLabelString = Tkinter.StringVar()
@@ -599,7 +812,9 @@ class theGUI(Tkinter.Tk):
 					else:
 						if test.clas == 'Druid':
 							dcMod = test.wisMod
+							print 'Class confirmed as Druid.'
 						for i in xrange(len(test.spellsPerDay)+1):
+							
 							if i == 0:
 								spdBox.insert(Tkinter.END, 'Lvl 0 : 99/Day DC {}'.format(10+dcMod))
 								for spell in test.spellsPrepared[i]:
@@ -693,12 +908,12 @@ class theGUI(Tkinter.Tk):
 			self.skillBox.insert(Tkinter.END, '{} +{}'.format(item[0], item[1]))
 
 		skillButton = Tkinter.Button(self, text='Roll Skill', command=self.rollSkill)
-		skillButton.grid(column=2, row=15, sticky=Tkinter.E)
+		skillButton.grid(column=2, row=15, columnspan=2, sticky=Tkinter.E)
 		self.skillLabelString = Tkinter.StringVar()
 		skillLabel = Tkinter.Label(self, textvariable=self.skillLabelString)
 		skillLabel.grid(column=0, row=15, columnspan=3, sticky=Tkinter.W)
 
-		writeButton = Tkinter.Button(self, text='Write Character to {}.ddc'.format(test.name), command=self.writeCharacter)
+		writeButton = Tkinter.Button(self, text='Save Character'.format(test.name), command=self.writeCharacter)
 		writeButton.grid(column=0, row=16, columnspan=3, sticky=Tkinter.W)
 
 		self.grid_columnconfigure(0,weight=1)
