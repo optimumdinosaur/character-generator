@@ -156,15 +156,17 @@ class theGUI(Tkinter.Tk):
 
 			test.name = sheet[0].rstrip()
 
-			test.level = int(sheet[1][6:8])
-			raceAndClass = str(sheet[1][9:-1])
-			spcIndex = raceAndClass.find(' ')
-			test.race = raceAndClass[0:spcIndex].rstrip()
-			test.clas = raceAndClass[spcIndex+1:].rstrip()
+			line = str(sheet[1])
+			test.level = int(line[line.find('LV')+2:line.find('#')])
+			test.race = line[line.find('RACE')+4:line.find('$')].strip()
+			test.clas = line[line.find('CLASS')+5:line.find('%')].strip()
+
+
 		
-			print "raceAndClass: '{}'".format(raceAndClass)
-			print "Race loaded as: '{}'".format(test.race)
-			print "Class loaded as: '{}'".format(test.clas)
+			print 'Level loaded as: {}'.format(test.level)
+			print 'Race loaded as: {}'.format(test.race)
+			print 'Class loaded as: {}'.format(test.clas)
+
 
 			test.hitPoints = int(sheet[2][4:])
 
@@ -226,8 +228,12 @@ class theGUI(Tkinter.Tk):
 				test.maneuverList = []
 				for i in xrange(numOfManeuvers):
 					test.maneuverList.append(sheet[maneuverIndex+i+1])
-				if test.clas == 'Swordsage' or test.clas == 'Warblade':
-					manReadyLine = sheet[maneuverIndex - 1]
+				manReadyLine = sheet[maneuverIndex - 1]
+				if test.clas == 'Crusader':
+					test.maneuversReadied = []
+					test.maneuversReadied.append(int(manReadyLine[manReadyLine.find('[')+1]))
+					test.maneuversReadied.append(int(manReadyLine[manReadyLine.find(']')-1]))
+				else: # Swordsages, Warblades
 					test.maneuversReadied = int(manReadyLine[manReadyLine.find(':')+1:])
 				
 				stanceIndex = sheet.index('Stances Known: \n')
@@ -416,7 +422,7 @@ class theGUI(Tkinter.Tk):
 
 
 		outFile.write('{}\n'.format(test.name))
-		outFile.write('Level {} {} {}\n'.format(test.level, test.race, test.clas))
+		outFile.write('LV{}# RACE{}$ CLASS{}%\n'.format(test.level, test.race, test.clas))
 		outFile.write('HP: {}\n'.format(test.hitPoints))
 		outFile.write('Ability Scores\n')
 		outFile.write('Str {} ({})\n'.format(test.strength, test.strMod))
