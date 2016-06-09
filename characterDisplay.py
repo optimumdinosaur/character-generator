@@ -13,7 +13,7 @@ class theGUI(Tkinter.Tk):
 	def __init__(self,parent):
 		Tkinter.Tk.__init__(self,parent)
 		self.parent = parent
-		self.minsize(width=420, height=635)
+		self.minsize(width=560, height=640)
 		self.initialize()
 
 
@@ -300,10 +300,6 @@ class theGUI(Tkinter.Tk):
 						test.spellList[level].append(spell)
 							
 
-
-
-
-
 			elif test.clas == 'Ardent' or test.clas == 'Psion' or test.clas == 'Wilder':
 				test.tags.update(['Psionic'])
 				powerIndex = sheet.index('Powers Known: \n')
@@ -330,12 +326,6 @@ class theGUI(Tkinter.Tk):
 				test.rogueTalents = []
 				for i in xrange(numOfRogueTalents):
 					test.rogueTalents.append(sheet[talentIndex+i+1])
-
-
-
-
-
-
 
 
 			self.displayCharacter()
@@ -400,6 +390,12 @@ class theGUI(Tkinter.Tk):
 		print 'raceChoices ', raceChoices
 		print 'classChoices ', classChoices
 
+		if not raceChoices: # if it's empty
+			raceChoices = ['Dwarf', 'Elf', 'Gnome', 'Halfling', 'Half-Orc', 'Human', 'Kobold']
+
+		if not classChoices:
+			classChoices = ['Ardent', 'Barbarian', 'Bard', 'Beguiler', 'Crusader', 'Dread Necromancer', 'Druid', 'Fighter', 'Paladin', 'Psion', 'Ranger', 'Rogue', 'Swordsage', 'Warblade', 'Warmage', 'Wilder']
+
 		raceChoice = random.choice(raceChoices)
 		classChoice = random.choice(classChoices)
 
@@ -438,29 +434,6 @@ class theGUI(Tkinter.Tk):
 		outFile.write('Will +{}\n'.format(test.willSave))
 		outFile.write('BAB +{}\n'.format(test.BAB))
 
-
-		# this is where im going to have to write the character's basic attack form
-		# Need a single attack, and full attack displayed
-		# but only if the character has the appropriate tags: Melee or Ranged Attacker
-		# if 'Melee' in test.tags or 'Ranged Attacker' in test.tags:
-		# 	parsedWeapon = test.equipment['Main Hand'][3:]
-		# 	weaponBonus = int(test.equipment['Main Hand'][1])
-		# 	weaponDamage = characterGenerator.weapons[parsedWeapon][0]
-		# 	numOfDice = int(weaponDamage[0])
-		# 	dieSize = int(weaponDamage[2:])
-		# 	attackBonus = weaponBonus + test.BAB
-		# 	damageBonus = test.strMod + weaponBonus
-		# 	if 'Weapon Finesse' in test.featList or 'Ranged Attacker' in test.tags:
-		# 		attackBonus += test.dexMod
-		# 	else:
-		# 		attackBonus += test.strMod
-		# 	if 'Weapon Focus' in test.featList:
-		# 		attackBonus += 1
-		# 	if 'Weapon Specialization' in test.featList:
-		# 		damageBonus += 2
-		# 	if 'Big Weapon' in test.tags: # 2 handed
-		# 		damageBonus += int(0.5 * test.strMod)
-		# 	outFile.write('Basic Attack: {} +{} ATK {}d{}+{} {}-20/x{}\n'.format(parsedWeapon, attackBonus, numOfDice, dieSize, damageBonus, characterGenerator.weapons[parsedWeapon][1], characterGenerator.weapons[parsedWeapon][2]))
 
 		outFile.write('\n')
 
@@ -580,6 +553,26 @@ class theGUI(Tkinter.Tk):
 		self.initialize()
 
 
+	def adjustHP(self):
+		test.currentHP += int(self.adjustHPEntry.get())
+		if test.currentHP > test.hitPoints:
+			test.currentHP = test.hitPoints
+		self.hpLabelString.set('Hit Points {}/{}'.format(test.currentHP, test.hitPoints))
+		self.adjustHPEntry.delete(0, Tkinter.END)
+
+	def rollFort(self):
+		roll = random.randint(1, 20)
+		self.fortResultString.set('{} ([{}] + {}'.format(roll + test.fortSave, roll, test.fortSave))
+
+	def rollRef(self):
+		roll = random.randint(1, 20)
+		self.refResultString.set('{} ([{}] + {}'.format(roll + test.refSave, roll, test.refSave))
+
+	def rollWill(self):
+		roll = random.randint(1, 20)
+		self.willResultString.set('{} ([{}] + {}'.format(roll + test.willSave, roll, test.willSave))
+
+
 	def displayCharacter(self):
 		heightSM = 12 # height of skill and move boxes
 		widthSM = 35 # width of skill and move boxes
@@ -642,7 +635,8 @@ class theGUI(Tkinter.Tk):
 		self.hpLabelString = Tkinter.StringVar()
 		hpLabel = Tkinter.Label(self, textvariable=self.hpLabelString)
 		hpLabel.grid(column=2,row=3)
-		self.hpLabelString.set('Hit Points {}'.format(test.hitPoints))
+		test.currentHP = test.hitPoints # start them out at full hp
+		self.hpLabelString.set('Hit Points {}/{}'.format(test.currentHP, test.hitPoints))
 
 		self.acLabelString = Tkinter.StringVar()
 		acLabel = Tkinter.Label(self, textvariable=self.acLabelString)
@@ -914,20 +908,48 @@ class theGUI(Tkinter.Tk):
 			self.skillBox.insert(Tkinter.END, '{} +{}'.format(item[0], item[1]))
 
 		skillButton = Tkinter.Button(self, text='Roll Skill', command=self.rollSkill)
-		skillButton.grid(column=2, row=15, columnspan=2, sticky=Tkinter.E)
+		skillButton.grid(column=4, row=14)
 		self.skillLabelString = Tkinter.StringVar()
 		skillLabel = Tkinter.Label(self, textvariable=self.skillLabelString)
-		skillLabel.grid(column=0, row=15, columnspan=3, sticky=Tkinter.W)
+		skillLabel.grid(column=2, row=15, columnspan=3, sticky=Tkinter.W)
 
 		writeButton = Tkinter.Button(self, text='Save Character'.format(test.name), command=self.writeCharacter)
-		writeButton.grid(column=0, row=16, columnspan=3, sticky=Tkinter.W)
+		writeButton.grid(column=0, row=15, columnspan=3, sticky=Tkinter.W)
+
+
+		adjustHPButton = Tkinter.Button(self, text='Adjust Hit Points:', command = self.adjustHP)
+		adjustHPButton.grid(column=4, row=3, padx=3)
+		self.adjustHPEntry = Tkinter.Entry(self, width=6)
+		self.adjustHPEntry.grid(column=5, row=3)
+
+		rollFortButton = Tkinter.Button(self, text='Roll Fort:', command = self.rollFort)
+		rollFortButton.grid(column=4, row=6)
+		self.fortResultString = Tkinter.StringVar()
+		self.fortResultLabel = Tkinter.Label(self, textvariable = self.fortResultString)
+		self.fortResultLabel.grid(column=5, row=6)
+
+		rollRefButton = Tkinter.Button(self, text='Roll Reflex:', command=self.rollRef)
+		rollRefButton.grid(column=4, row=7)
+		self.refResultString = Tkinter.StringVar()
+		self.refResultLabel = Tkinter.Label(self, textvariable = self.refResultString)
+		self.refResultLabel.grid(column=5, row=7)
+
+		rollWillButton = Tkinter.Button(self, text='Roll Will:', command=self.rollWill)
+		rollWillButton.grid(column=4, row=8)
+		self.willResultString = Tkinter.StringVar()
+		self.willResultLabel = Tkinter.Label(self, textvariable = self.willResultString)
+		self.willResultLabel.grid(column=5, row=8)
 
 		self.grid_columnconfigure(0,weight=1)
 		self.resizable(False,False)
 		self.update()
 		self.geometry(self.geometry())
 
+		
+
+
 	# END displayCharacter
+
 
 
 if __name__ == "__main__":
