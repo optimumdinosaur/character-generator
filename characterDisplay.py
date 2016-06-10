@@ -580,8 +580,14 @@ class theGUI(Tkinter.Tk):
 		powerName = powerLine[:powerLine.find('(')]
 		powerCost = int(powerLine[powerLine.find('(')+1:powerLine.find(')')])
 		powerCost += self.augmentScale.get()
-		
-		if powerCost > test.level:
+		effManifesterLevel = test.level
+
+
+		if test.clas == 'Wilder':
+			powerCost -= self.wildSurgeScale.get()
+			effManifesterLevel += self.wildSurgeScale.get()
+
+		if powerCost > effManifesterLevel:
 			self.manifestedString.set('Power cost exceeds manifester level!')
 		elif powerCost > test.currentPP:
 			self.manifestedString.set('Not enough PP!')
@@ -753,6 +759,7 @@ class theGUI(Tkinter.Tk):
 				powerScroll = Tkinter.Scrollbar(self)
 				self.powerBox = Tkinter.Listbox(self, yscrollcommand=powerScroll.set)
 				self.powerBox.config(width=widthSM)
+				self.powerBox.bind('<ListboxSelect>')
 				powerLabel.grid(column=2, row=11, columnspan=2, sticky=Tkinter.W)
 				self.powerBox.grid(column=2, row=12, rowspan=5, sticky=Tkinter.N+Tkinter.S)
 				
@@ -777,13 +784,33 @@ class theGUI(Tkinter.Tk):
 				augmentString.set('Augment')
 				augmentLabel = Tkinter.Label(self, textvariable = augmentString)
 				augmentLabel.grid(column=4, row=12, columnspan=2, sticky=Tkinter.N, pady=28)
-				self.augmentScale = Tkinter.Scale(self, from_=0, to=test.level, orient=Tkinter.HORIZONTAL)
-				self.augmentScale.grid(column=4, row=12, columnspan=2, sticky=Tkinter.W+Tkinter.E, padx=2)
+
+
+				powerLine = str(self.powerBox.get(Tkinter.ACTIVE))
+		
+				powerCost = int(powerLine[powerLine.find('(')+1:powerLine.find(')')])
+				augmentMax = test.level - powerCost
+
+				self.augmentScale = Tkinter.Scale(self, from_=0, to=augmentMax, orient=Tkinter.HORIZONTAL)
+				self.augmentScale.grid(column=4, row=12, columnspan=2, sticky=Tkinter.W+Tkinter.E, padx=2, pady=2)
+
+
+				if test.clas == 'Wilder':
+					wildSurgeString = Tkinter.StringVar()
+					wildSurgeString.set('Wild Surge')
+					wildSurgeLabel = Tkinter.Label(self, textvariable=wildSurgeString)
+					wildSurgeLabel.grid(column=4, row=12, columnspan=2, sticky=Tkinter.S, ipady=10)
+
+					wildSurge = ((test.level + 1) / 4) + 1
+					self.wildSurgeScale = Tkinter.Scale(self, from_=0, to=wildSurge, orient=Tkinter.HORIZONTAL)
+					self.wildSurgeScale.grid(column=4, row=13, columnspan=2, padx=2, pady=2, sticky=Tkinter.W+Tkinter.E)
+
+
 
 
 				self.manifestedString = Tkinter.StringVar()
 				self.manifestedLabel = Tkinter.Label(self, textvariable = self.manifestedString, wraplength=110)
-				self.manifestedLabel.grid(column=4, row=12, sticky=Tkinter.S)
+				self.manifestedLabel.grid(column=4, row=14, columnspan=2, sticky=Tkinter.W)
 
 
 
