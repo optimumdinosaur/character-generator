@@ -13,7 +13,7 @@ class theGUI(Tkinter.Tk):
 	def __init__(self,parent):
 		Tkinter.Tk.__init__(self,parent)
 		self.parent = parent
-		self.minsize(width=560, height=640)
+		self.minsize(width=580, height=680)
 		self.initialize()
 
 
@@ -513,7 +513,7 @@ class theGUI(Tkinter.Tk):
 		skillName = skillWithBonus[:skillWithBonus.index('+')]
 		skillBonus = int(skillWithBonus[skillWithBonus.index('+')+1:])
 		finalRoll = roll + skillBonus
-		self.skillLabelString.set('Roll {} : {} ({} + {})'.format(skillName, finalRoll, roll, skillBonus))
+		self.skillLabelString.set('{} ([{}] + {})'.format(finalRoll, roll, skillBonus))
 
 
 	# call back function for the Roll button near the basic attack display
@@ -562,15 +562,36 @@ class theGUI(Tkinter.Tk):
 
 	def rollFort(self):
 		roll = random.randint(1, 20)
-		self.fortResultString.set('{} ([{}] + {}'.format(roll + test.fortSave, roll, test.fortSave))
+		self.fortResultString.set('{} ([{}])'.format(roll + test.fortSave, roll))
 
 	def rollRef(self):
 		roll = random.randint(1, 20)
-		self.refResultString.set('{} ([{}] + {}'.format(roll + test.refSave, roll, test.refSave))
+		self.refResultString.set('{} ([{}])'.format(roll + test.refSave, roll))
 
 	def rollWill(self):
 		roll = random.randint(1, 20)
-		self.willResultString.set('{} ([{}] + {}'.format(roll + test.willSave, roll, test.willSave))
+		self.willResultString.set('{} ([{}])'.format(roll + test.willSave, roll))
+
+
+	def manifestPower(self):
+
+
+		powerLine = str(self.powerBox.get(Tkinter.ACTIVE))
+		powerName = powerLine[:powerLine.find('(')]
+		powerCost = int(powerLine[powerLine.find('(')+1:powerLine.find(')')])
+		powerCost += self.augmentScale.get()
+		
+		if powerCost > test.level:
+			self.manifestedString.set('Power cost exceeds manifester level!')
+		elif powerCost > test.currentPP:
+			self.manifestedString.set('Not enough PP!')
+		else:
+			test.currentPP -= powerCost
+			self.ppLabelString.set('PP {}/{}'.format(test.currentPP, test.powerPoints))
+			self.manifestedString.set('Manifested {}!'.format(powerName))
+		
+
+
 
 
 	def displayCharacter(self):
@@ -694,7 +715,7 @@ class theGUI(Tkinter.Tk):
 		atkLabel.grid(column=0,row=10,columnspan=3, sticky=Tkinter.W)
 		self.atkLabelString.set('Basic Attack: {} +{} ATK {}d{}+{} {}-20/x{}'.format(parsedWeapon, self.attackBonus, numOfDice, dieSize, self.damageBonus, characterGenerator.weapons[parsedWeapon][1], characterGenerator.weapons[parsedWeapon][2]))
 		atkButton = Tkinter.Button(self, text='Roll Attack', command=self.rollAttack)
-		atkButton.grid(column=2, row=10, sticky=Tkinter.E)
+		atkButton.grid(column=4, row=10)
 
 		self.atkResultString = Tkinter.StringVar()
 		atkResultLabel = Tkinter.Label(self, textvariable=self.atkResultString)
@@ -723,30 +744,66 @@ class theGUI(Tkinter.Tk):
 			skillScroll.config(command=self.skillBox.yview)
 			skillScroll.grid(column=3, row=14, sticky=Tkinter.N+Tkinter.S)	
 
-		else:
+		else: # anything but Fighter
 
 			if 'Psionic' in test.tags:
+				powerLabelString = Tkinter.StringVar()
+				powerLabelString.set('Powers Known (Cost):')
+				powerLabel = Tkinter.Label(self, textvariable = powerLabelString)
 				powerScroll = Tkinter.Scrollbar(self)
-				powerBox = Tkinter.Listbox(self, yscrollcommand=powerScroll.set)
-				powerBox.config(height=20, width=widthSM)
-				powerBox.grid(column=0, row=12, rowspan=3)
+				self.powerBox = Tkinter.Listbox(self, yscrollcommand=powerScroll.set)
+				self.powerBox.config(width=widthSM)
+				powerLabel.grid(column=2, row=11, columnspan=2, sticky=Tkinter.W)
+				self.powerBox.grid(column=2, row=12, rowspan=5, sticky=Tkinter.N+Tkinter.S)
 				
-				powerScroll.config(command=powerBox.yview)
-				powerScroll.grid(column=1, row=12, sticky=Tkinter.N+Tkinter.S, rowspan=3)
+				powerScroll.config(command=self.powerBox.yview)
+				powerScroll.grid(column=3, row=12, sticky=Tkinter.N+Tkinter.S, rowspan=5)
 
-				powerBox.insert(Tkinter.END, 'PP: {}'.format(test.powerPoints))
 				for power in test.powerList:
-					powerBox.insert(Tkinter.END, power)
+					self.powerBox.insert(Tkinter.END, power)
+
+
+
+				self.ppLabelString = Tkinter.StringVar()
+				test.currentPP = test.powerPoints
+				self.ppLabelString.set('PP {}/{}'.format(test.currentPP, test.powerPoints))
+				ppLabel = Tkinter.Label(self, textvariable = self.ppLabelString)
+				ppLabel.grid(column=4, row=11, columnspan=2, sticky=Tkinter.W, padx=1, pady=3)
+
+				manifestButton = Tkinter.Button(self, text='Manifest Power', command=self.manifestPower)
+				manifestButton.grid(column=4, row=12, sticky=Tkinter.N, pady=1, padx=1)
+
+				augmentString = Tkinter.StringVar()
+				augmentString.set('Augment')
+				augmentLabel = Tkinter.Label(self, textvariable = augmentString)
+				augmentLabel.grid(column=4, row=12, columnspan=2, sticky=Tkinter.N, pady=28)
+				self.augmentScale = Tkinter.Scale(self, from_=0, to=test.level, orient=Tkinter.HORIZONTAL)
+				self.augmentScale.grid(column=4, row=12, columnspan=2, sticky=Tkinter.W+Tkinter.E, padx=2)
+
+
+				self.manifestedString = Tkinter.StringVar()
+				self.manifestedLabel = Tkinter.Label(self, textvariable = self.manifestedString, wraplength=110)
+				self.manifestedLabel.grid(column=4, row=12, sticky=Tkinter.S)
+
+
+
+
+
+
 
 			elif 'Martial Adept' in test.tags:
+				manLabelString = Tkinter.StringVar()
+				manLabelString.set('Maneuvers Known (**{} Ready**)'.format(test.maneuversReadied))
+				manLabel = Tkinter.Label(self, textvariable = manLabelString)
 				manScroll = Tkinter.Scrollbar(self)
 				manBox = Tkinter.Listbox(self, yscrollcommand=manScroll.set)
 				manBox.config(height=14, width=widthSM)
-				manBox.grid(column=0, row=12, rowspan=2)
+				manLabel.grid(column=2, row=11, columnspan=2, sticky=Tkinter.W)
+				manBox.grid(column=2, row=12, rowspan=3, padx=2)
 				manScroll.config(command=manBox.yview)
-				manScroll.grid(column=1, row=12, sticky=Tkinter.N+Tkinter.S, rowspan=2)
+				manScroll.grid(column=3, row=12, sticky=Tkinter.N+Tkinter.S, rowspan=3)
 
-				manBox.insert(Tkinter.END, 'Maneuvers Known: (**{} Ready**)'.format(test.maneuversReadied))
+
 				if test.clas == 'Crusader':
 					grantedManeuverIndices = random.sample(xrange(len(test.maneuverList)), test.maneuversReadied[0])
 					readyManeuverIndices = random.sample(grantedManeuverIndices, test.maneuversReadied[1])
@@ -766,14 +823,19 @@ class theGUI(Tkinter.Tk):
 						else:
 							manBox.insert(Tkinter.END, test.maneuverList[i])
 
+
+				stanceLabelString = Tkinter.StringVar()
+				stanceLabelString.set('Stances Known (**Active**):')
+				stanceLabel = Tkinter.Label(self, textvariable = stanceLabelString)
 				stanceScroll = Tkinter.Scrollbar(self)
 				stanceBox = Tkinter.Listbox(self, yscrollcommand=stanceScroll.set)
 				stanceBox.config(height=6, width=widthSM)
-				stanceBox.grid(column=0, row=14)
+				stanceLabel.grid(column=2, row=15, columnspan=2, sticky=Tkinter.W, padx=2)
+				stanceBox.grid(column=2, row=16, padx=2)
 				stanceScroll.config(command=stanceBox.yview)
-				stanceScroll.grid(column=1, row=14, sticky=Tkinter.N+Tkinter.S)
+				stanceScroll.grid(column=3, row=16, sticky=Tkinter.N+Tkinter.S)
 
-				stanceBox.insert(Tkinter.END, 'Stances Known: (**Active**)')
+
 				activeStanceIndex = random.randint(0, len(test.stanceList)-1)
 				for i in xrange(len(test.stanceList)):
 					if i == activeStanceIndex:
@@ -783,23 +845,26 @@ class theGUI(Tkinter.Tk):
 
 
 			elif 'Spellcaster' in test.tags:
+				spellLabelString = Tkinter.StringVar()
+				spellLabel = Tkinter.Label(self, textvariable = spellLabelString)
 				spellScroll = Tkinter.Scrollbar(self)
 				spellBox = Tkinter.Listbox(self, yscrollcommand=spellScroll.set)
 				spellBox.config(height=14, width=widthSM)
-				spellBox.grid(column=0, row=12, rowspan=2)
+				spellLabel.grid(column=2, row=11, columnspan=2, sticky=Tkinter.W)
+				spellBox.grid(column=2, row=12, rowspan=3)
 				spellScroll.config(command=spellBox.yview)
-				spellScroll.grid(column=1, row=12, sticky=Tkinter.N+Tkinter.S, rowspan=2)
+				spellScroll.grid(column=3, row=12, sticky=Tkinter.N+Tkinter.S, rowspan=3)
 
 
 				spdScroll = Tkinter.Scrollbar(self) # spd = spells per day
 				spdBox = Tkinter.Listbox(self, yscrollcommand=spdScroll.set)
-				spdBox.config(height=6, width=widthSM)
-				spdBox.grid(column=0, row=14)
+				spdBox.config(width=widthSM)
+				spdBox.grid(column=2, row=15, rowspan=2, sticky=Tkinter.N+Tkinter.S)
 				spdScroll.config(command=spdBox.yview)
-				spdScroll.grid(column=1, row=14, sticky=Tkinter.N+Tkinter.S)
+				spdScroll.grid(column=3, row=15, rowspan=2, sticky=Tkinter.N+Tkinter.S)
 
 				if 'Prepared' in test.tags:
-					spellBox.insert(Tkinter.END, 'Spells Prepared (Level): ')
+					spellLabelString.set('Spells Prepared (Level):')
 					if test.clas == 'Paladin' or test.clas == 'Ranger':
 						if test.clas == 'Paladin':
 							dcMod = test.chaMod
@@ -812,7 +877,6 @@ class theGUI(Tkinter.Tk):
 					else:
 						if test.clas == 'Druid':
 							dcMod = test.wisMod
-							print 'Class confirmed as Druid.'
 						for i in xrange(len(test.spellsPerDay)+1):
 							
 							if i == 0:
@@ -825,7 +889,7 @@ class theGUI(Tkinter.Tk):
 									spellBox.insert(Tkinter.END, '{} ({})'.format(spell, i))
 
 				elif 'Spontaneous' in test.tags:
-					spellBox.insert(Tkinter.END, 'Spells Known (Level): ')
+					spellLabelString.set('Spells Known (Level):')
 					if test.clas == 'Dread Necromancer':
 						for i in xrange(len(test.spellsPerDay)):
 							spdBox.insert(Tkinter.END, 'Lvl {} : {}/day DC {}'.format(i+1, test.spellsPerDay[i], i+11+test.chaMod))
@@ -848,97 +912,116 @@ class theGUI(Tkinter.Tk):
 					
 
 			elif test.clas == 'Barbarian':
+				rageLabelString = Tkinter.StringVar()
+				rageLabelString.set('Rage Powers:')
+				rageLabel = Tkinter.Label(self, textvariable = rageLabelString)
 				rageScroll = Tkinter.Scrollbar(self)
 				rageBox = Tkinter.Listbox(self, yscrollcommand=rageScroll.set)
 				rageBox.config(height=20, width=widthSM)
-				rageBox.grid(column=0, row=12, rowspan=3)
+				rageLabel.grid(column=2, row=11, columnspan=2, sticky=Tkinter.W)
+				rageBox.grid(column=2, row=12, rowspan=5)
 				rageScroll.config(command=rageBox.yview)
-				rageScroll.grid(column=1, row=12, rowspan=3, sticky= Tkinter.N+Tkinter.S)
-				rageBox.insert(Tkinter.END, 'Rage Powers: ')
+				rageScroll.grid(column=3, row=12, rowspan=5, sticky= Tkinter.N+Tkinter.S)
 				for item in test.ragePowers:
 					rageBox.insert(Tkinter.END, item)
 
 			elif test.clas == 'Rogue':
+				rogueTalentString = Tkinter.StringVar()
+				rogueTalentString.set('Rogue Talents:')
+				rogueTalentLabel = Tkinter.Label(self, textvariable = rogueTalentString)
 				rogueTalentScroll = Tkinter.Scrollbar(self)
 				rogueTalentBox = Tkinter.Listbox(self, yscrollcommand=rogueTalentScroll.set)
 				rogueTalentBox.config(height=20, width=widthSM)
-				rogueTalentBox.grid(column=0, row=12, rowspan=3)
+				rogueTalentLabel.grid(column=2, row=11, columnspan=2, sticky=Tkinter.W)
+				rogueTalentBox.grid(column=2, row=12, rowspan=5)
 				rogueTalentScroll.config(command=rogueTalentBox.yview)
-				rogueTalentScroll.grid(column=1, row=12, rowspan=3, sticky= Tkinter.N+Tkinter.S)
+				rogueTalentScroll.grid(column=3, row=12, rowspan=5, sticky= Tkinter.N+Tkinter.S)
 				rogueTalentBox.insert(Tkinter.END, 'Rogue Talents: ')
 				for item in test.rogueTalents:
 					rogueTalentBox.insert(Tkinter.END, item)
 
+			specialLabelString = Tkinter.StringVar()
+			specialLabelString.set('Special:')
+			specialLabel = Tkinter.Label(self, textvariable = specialLabelString)
 			specialScroll = Tkinter.Scrollbar(self)
 			specialBox = Tkinter.Listbox(self, yscrollcommand=specialScroll.set)
 			specialBox.config(height=8, width=widthSM)
-			specialBox.grid(column=2, row=12)
-			
+			specialLabel.grid(column=0, row=11, sticky=Tkinter.W)
+			specialBox.grid(column=0, row=12)
 			specialScroll.config(command=specialBox.yview)
-			specialScroll.grid(column=3, row=12, sticky=Tkinter.N+Tkinter.S)
+			specialScroll.grid(column=1, row=12, sticky=Tkinter.N+Tkinter.S)
 
+
+			featLabelString = Tkinter.StringVar()
+			featLabelString.set('Feats:')
+			featLabel = Tkinter.Label(self, textvariable = featLabelString)
 			featScroll = Tkinter.Scrollbar(self)
 			featBox = Tkinter.Listbox(self, yscrollcommand=featScroll.set)
 			featBox.config(height=5, width=widthSM)
-			featBox.grid(column=2, row=13)
-			
+			featLabel.grid(column=0, row=13, sticky=Tkinter.W)
+			featBox.grid(column=0, row=14)
 			featScroll.config(command=featBox.yview)
-			featScroll.grid(column=3, row=13, sticky=Tkinter.N+Tkinter.S)
+			featScroll.grid(column=1, row=14, sticky=Tkinter.N+Tkinter.S)
 
+
+			skillTitleString = Tkinter.StringVar()
+			skillTitleString.set('Skills:')
+			skillTitleLabel = Tkinter.Label(self, textvariable = skillTitleString)
 			skillScroll = Tkinter.Scrollbar(self)
 			self.skillBox = Tkinter.Listbox(self, yscrollcommand=skillScroll.set)
 			self.skillBox.config(height=7, width=widthSM)
-			self.skillBox.grid(column=2, row=14)
+			skillTitleLabel.grid(column=0, row=15, sticky=Tkinter.W)
+			self.skillBox.grid(column=0, row=16)
 			
 			skillScroll.config(command=self.skillBox.yview)
-			skillScroll.grid(column=3, row=14, sticky=Tkinter.N+Tkinter.S)			
+			skillScroll.grid(column=1, row=16, sticky=Tkinter.N+Tkinter.S)			
 
 
 
-		specialBox.insert(Tkinter.END, 'Special Features: ')
+
 		for item in test.specialList:
 			specialBox.insert(Tkinter.END, item)
-		featBox.insert(Tkinter.END, 'Feats: ')
+
 		for item in test.featList:
 			featBox.insert(Tkinter.END, item)
-		self.skillBox.insert(Tkinter.END, 'Skills: ')
+
 		sortedSkills = sorted(test.skillBonus.items(), key=operator.itemgetter(1))
 		sortedSkills.reverse()
 		for item in sortedSkills:
 			self.skillBox.insert(Tkinter.END, '{} +{}'.format(item[0], item[1]))
 
 		skillButton = Tkinter.Button(self, text='Roll Skill', command=self.rollSkill)
-		skillButton.grid(column=4, row=14)
+		skillButton.grid(column=4, row=15, sticky=Tkinter.W, padx=1)
 		self.skillLabelString = Tkinter.StringVar()
 		skillLabel = Tkinter.Label(self, textvariable=self.skillLabelString)
-		skillLabel.grid(column=2, row=15, columnspan=3, sticky=Tkinter.W)
+		skillLabel.grid(column=4, row=16, columnspan=2, sticky=Tkinter.W+Tkinter.N, padx=1, pady=1)
 
 		writeButton = Tkinter.Button(self, text='Save Character'.format(test.name), command=self.writeCharacter)
-		writeButton.grid(column=0, row=15, columnspan=3, sticky=Tkinter.W)
+		writeButton.grid(column=0, row=17, columnspan=3, sticky=Tkinter.W)
 
 
 		adjustHPButton = Tkinter.Button(self, text='Adjust Hit Points:', command = self.adjustHP)
 		adjustHPButton.grid(column=4, row=3, padx=3)
-		self.adjustHPEntry = Tkinter.Entry(self, width=6)
+		self.adjustHPEntry = Tkinter.Entry(self, width=8)
 		self.adjustHPEntry.grid(column=5, row=3)
 
 		rollFortButton = Tkinter.Button(self, text='Roll Fort:', command = self.rollFort)
 		rollFortButton.grid(column=4, row=6)
 		self.fortResultString = Tkinter.StringVar()
 		self.fortResultLabel = Tkinter.Label(self, textvariable = self.fortResultString)
-		self.fortResultLabel.grid(column=5, row=6)
+		self.fortResultLabel.grid(column=5, row=6, sticky=Tkinter.W)
 
 		rollRefButton = Tkinter.Button(self, text='Roll Reflex:', command=self.rollRef)
 		rollRefButton.grid(column=4, row=7)
 		self.refResultString = Tkinter.StringVar()
 		self.refResultLabel = Tkinter.Label(self, textvariable = self.refResultString)
-		self.refResultLabel.grid(column=5, row=7)
+		self.refResultLabel.grid(column=5, row=7, sticky=Tkinter.W)
 
 		rollWillButton = Tkinter.Button(self, text='Roll Will:', command=self.rollWill)
 		rollWillButton.grid(column=4, row=8)
 		self.willResultString = Tkinter.StringVar()
 		self.willResultLabel = Tkinter.Label(self, textvariable = self.willResultString)
-		self.willResultLabel.grid(column=5, row=8)
+		self.willResultLabel.grid(column=5, row=8, sticky=Tkinter.W)
 
 		self.grid_columnconfigure(0,weight=1)
 		self.resizable(False,False)
