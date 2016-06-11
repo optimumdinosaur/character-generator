@@ -789,23 +789,24 @@ class theGUI(Tkinter.Tk):
 				powerLine = str(self.powerBox.get(Tkinter.ACTIVE))
 		
 				powerCost = int(powerLine[powerLine.find('(')+1:powerLine.find(')')])
-				augmentMax = test.level - powerCost
+				self.augmentMax = test.level
+				
 
-				self.augmentScale = Tkinter.Scale(self, from_=0, to=augmentMax, orient=Tkinter.HORIZONTAL)
-				self.augmentScale.grid(column=4, row=12, columnspan=2, sticky=Tkinter.W+Tkinter.E, padx=2, pady=2)
-
-
+			
 				if test.clas == 'Wilder':
+					wildSurge = ((test.level + 1) / 4) + 1
+					self.augmentMax += wildSurge
 					wildSurgeString = Tkinter.StringVar()
 					wildSurgeString.set('Wild Surge')
 					wildSurgeLabel = Tkinter.Label(self, textvariable=wildSurgeString)
 					wildSurgeLabel.grid(column=4, row=12, columnspan=2, sticky=Tkinter.S, ipady=10)
 
-					wildSurge = ((test.level + 1) / 4) + 1
 					self.wildSurgeScale = Tkinter.Scale(self, from_=0, to=wildSurge, orient=Tkinter.HORIZONTAL)
 					self.wildSurgeScale.grid(column=4, row=13, columnspan=2, padx=2, pady=2, sticky=Tkinter.W+Tkinter.E)
 
 
+				self.augmentScale = Tkinter.Scale(self, from_=0, to=self.augmentMax, orient=Tkinter.HORIZONTAL)
+				self.augmentScale.grid(column=4, row=12, columnspan=2, sticky=Tkinter.W+Tkinter.E, padx=2, pady=2)
 
 
 				self.manifestedString = Tkinter.StringVar()
