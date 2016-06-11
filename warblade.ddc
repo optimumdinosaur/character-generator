@@ -1,0 +1,119 @@
+Yikyak
+LV16# RACEKobold$ CLASSWarblade%
+HP: 125
+Ability Scores
+Str 15 (2)
+Dex 14 (2)
+Con 11 (0)
+Int 14 (2)
+Wis 11 (0)
+Cha 11 (0)
+
+Armor Class 22	(Touch 13 / Flat-Footed 20)
+Fort +10
+Ref +9
+Will +5
+BAB +16
+
+ENDSPELLS
+NumOf Maneuvers Readied: 6
+Maneuvers Known: 
+Sapphire Nightmare Blade
+Moment of Perfect Mind
+Leading the Attack
+Steely Strike
+Tactical Strike
+Mind Over Body
+Mind Strike
+Disrupting Blow
+Irresistable Mountain Strike
+Avalanche of Blades
+Diamond Defense
+ENDMANEUVERSKNOWN
+Stances Known: 
+Stonefoot Stance
+Leading the Charge
+Absolute Steel Stance
+Pearl of Black Doubt
+ENDSTANCES
+
+Skills: 
+Swim: 23
+Climb: 23
+Craft: 21
+Acrobatics: 20
+Diplomacy: 19
+Autohypnosis: 19
+Craft(Trapmaking): 4
+Knowledge(Nature): 2
+Psicraft: 2
+Knowledge(Psionics): 2
+Knowledge(Religion): 2
+Knowledge(Nobility): 2
+Knowledge(Engineering): 2
+Spellcraft: 2
+Knowledge(Local): 2
+Perception: 2
+Appraise: 2
+Profession(Miner): 2
+Knowledge(Dungeoneering): 2
+Knowledge(Planar): 2
+Martial Lore: 2
+Knowledge(History): 2
+Knowledge(Arcana): 2
+Knowledge(Geography): 2
+Linguistics: 2
+Ride: 1
+Sleight of Hand: 1
+Escape Artist: 1
+Disable Device: 1
+Stealth: 1
+Fly: 1
+Survival: 0
+Bluff: 0
+Disguise: 0
+Handle Animal: 0
+Heal: 0
+Perform: 0
+Use Psionic Device: 0
+Sense Motive: 0
+Use Magic Device: 0
+Profession: 0
+Intimidate: 0
+ENDSKILLS
+
+Special: 
+Scaly Skin
+Crafty
+Darkvision 60 feet
+Light Sensitivity
+Battle Clarity(Reflex Saves)
+Weapon Aptitude
+Uncanny Dodge
+Battle Ardor(Critical Confirmation)
+Improved Uncanny Dodge
+Battle Cunning(Damage)
+Battle Skill(Opposed Checks)
+Battle Mastery(Attacks of Opportunity)
+ENDSPECIAL
+
+Feats: 
+Lightning Reflexes
+Acrobatic
+Great Fortitude
+Vital Strike
+Improved Critical
+Disruptive
+Fleet
+Strike Back
+Improvised Weapon Mastery
+Improved Initiative
+Critical Focus
+Bleeding Critical
+ENDFEATS
+
+Equipment: {'Armor': '+4 Breastplate', 'Off Hand': '+0 Hand', 'Main Hand': '+5 Lance'}
+
+Languages: ['Draconic', 'Celestial', 'Gnome']
+
+Tags: set(['a', 'e', 'W', 'p', '-', 'o', 'Martial Adept', 'Melee', 'n', 'T', 'w', 'Medium Armor', 'Strong'])

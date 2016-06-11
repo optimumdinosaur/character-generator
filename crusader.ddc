@@ -1,0 +1,97 @@
+Name
+LV6# RACEHuman$ CLASSCrusader%
+HP: 72
+Ability Scores
+Str 16 (3)
+Dex 11 (0)
+Con 19 (4)
+Int 10 (0)
+Wis 12 (1)
+Cha 16 (3)
+
+Armor Class 19	(Touch 10 / Flat-Footed 19)
+Fort +9
+Ref +2
+Will +3
+BAB +6
+
+ENDSPELLS
+NumOf Maneuvers Readied: [5, 2]
+Maneuvers Known: 
+Stone Bones
+Charging Minotaur
+Douse the Flames
+Crusaders Strike
+Vanguard Strike
+Battle Leaders Charge
+Defensive Rebuke
+ENDMANEUVERSKNOWN
+Stances Known: 
+Bolstering Voice
+Martial Spirit
+ENDSTANCES
+
+Skills: 
+Diplomacy: 12
+Intimidate: 12
+Knowledge(Religion): 9
+Martial Lore: 9
+Knowledge(History): 9
+Bluff: 3
+Disguise: 3
+Handle Animal: 3
+Perform: 3
+Swim: 3
+Use Psionic Device: 3
+Climb: 3
+Use Magic Device: 3
+Survival: 1
+Heal: 1
+Perception: 1
+Sense Motive: 1
+Profession: 1
+Autohypnosis: 1
+Knowledge(Nature): 0
+Psicraft: 0
+Ride: 0
+Knowledge(Psionics): 0
+Sleight of Hand: 0
+Craft: 0
+Knowledge(Nobility): 0
+Escape Artist: 0
+Knowledge(Engineering): 0
+Spellcraft: 0
+Knowledge(Local): 0
+Appraise: 0
+Acrobatics: 0
+Disable Device: 0
+Stealth: 0
+Knowledge(Dungeoneering): 0
+Knowledge(Planar): 0
+Knowledge(Arcana): 0
+Knowledge(Geography): 0
+Linguistics: 0
+Fly: 0
+ENDSKILLS
+
+Special: 
+Furious Counterstrike
+Steely Resolve 10
+Indomitable Soul
+Zealous Surge
+Smite 1/day
+ENDSPECIAL
+
+Feats: 
+Quick Draw
+Shield Focus(Spiked Iron Light Shield)
+Improved Shield Bash
+Disruptive
+Power Attack
+ENDFEATS
+
+Equipment: {'Armor': '+1 Full Plate Armor', 'Off Hand': '+0 Hand', 'Main Hand': '+2 Greataxe'}
+
+Languages: ['Common']
+
+Tags: set(['Big Weapon', 'Shield', 'Martial Adept', 'Melee', 'Tough', 'Heavy Armor'])

@@ -1,0 +1,109 @@
+Name
+LV18# RACEKobold$ CLASSBarbarian%
+HP: 133
+Ability Scores
+Str 15 (2)
+Dex 15 (2)
+Con 12 (1)
+Int 10 (0)
+Wis 8 (-1)
+Cha 11 (0)
+
+Armor Class 22	(Touch 13 / Flat-Footed 20)
+Fort +12
+Ref +8
+Will +5
+BAB +18
+
+ENDSPELLS
+Rage Powers: 
+Rolling Dodge
+Impelling Disarm
+Reflexive Dodge
+Celestial Totem
+Body Bludgeon
+Greater Celestial Totem
+Deathless Frenzy
+Mighty Swing
+Boar's Charge
+ENDRAGEPOWERS
+
+Skills: 
+Perception: 22
+Craft: 21
+Handle Animal: 21
+Survival: 20
+Swim: 4
+Climb: 4
+Craft(Trapmaking): 2
+Ride: 1
+Sleight of Hand: 1
+Escape Artist: 1
+Acrobatics: 1
+Profession(Miner): 1
+Disable Device: 1
+Stealth: 1
+Fly: 1
+Knowledge(Nature): 0
+Psicraft: 0
+Knowledge(Psionics): 0
+Bluff: 0
+Disguise: 0
+Knowledge(Religion): 0
+Knowledge(Nobility): 0
+Knowledge(Engineering): 0
+Diplomacy: 0
+Spellcraft: 0
+Knowledge(Local): 0
+Perform: 0
+Appraise: 0
+Use Psionic Device: 0
+Use Magic Device: 0
+Knowledge(Dungeoneering): 0
+Knowledge(Planar): 0
+Martial Lore: 0
+Intimidate: 0
+Knowledge(History): 0
+Knowledge(Arcana): 0
+Knowledge(Geography): 0
+Linguistics: 0
+Heal: -1
+Sense Motive: -1
+Profession: -1
+Autohypnosis: -1
+ENDSKILLS
+
+Special: 
+Scaly Skin
+Crafty
+Darkvision 60 feet
+Light Sensitivity
+Fast Movement
+Rage
+Uncanny Dodge
+Improved Uncanny Dodge
+Greater Rage
+Indomitable Will
+Tireless Rage
+Trap Sense +6
+Damage Reduction 4/-
+ENDSPECIAL
+
+Feats: 
+Quick Draw
+Disruptive
+Lunge
+Spellbreaker
+Extra Rage
+Improved Initiative
+Strike Back
+Two-Weapon Fighting
+Double Slice
+Power Attack
+ENDFEATS
+
+Equipment: {'Armor': '+4 Breastplate', 'Off Hand': '+6 Handaxe', 'Main Hand': '+6 Handaxe'}
+
+Languages: ['Draconic']
+
+Tags: set(['Big Weapon', 'Two Weapons', 'Melee', 'Medium Armor', 'Tough', 'Strong'])

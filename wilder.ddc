@@ -1,0 +1,110 @@
+Name
+LV16# RACEGnome$ CLASSWilder%
+HP: 83
+Ability Scores
+Str 10 (0)
+Dex 14 (2)
+Con 15 (2)
+Int 12 (1)
+Wis 13 (1)
+Cha 22 (6)
+
+Armor Class 20	(Touch 13 / Flat-Footed 18)
+Fort +7
+Ref +7
+Will +11
+BAB +8
+
+ENDSPELLS
+Power Points: 269
+Powers Known: 
+Psionic Daze (1)
+Call to Mind (1)
+Mass Missive (3)
+Energy Retort (5)
+Telekinetic Maneuever (7)
+Psionic Plane Shift (9)
+Psionic Overland Flight (11)
+Ultrablast (13)
+Psionic Iron Body (15)
+ENDPOWERS
+
+Skills: 
+Escape Artist: 21
+Knowledge(Psionics): 20
+Craft: 20
+Bluff: 5
+Disguise: 5
+Handle Animal: 5
+Diplomacy: 5
+Perform: 5
+Use Psionic Device: 5
+Use Magic Device: 5
+Intimidate: 5
+Craft(Alchemy): 3
+Perception: 3
+Ride: 2
+Sleight of Hand: 2
+Acrobatics: 2
+Disable Device: 2
+Stealth: 2
+Fly: 2
+Knowledge(Nature): 1
+Psicraft: 1
+Survival: 1
+Knowledge(Religion): 1
+Knowledge(Nobility): 1
+Heal: 1
+Knowledge(Engineering): 1
+Spellcraft: 1
+Knowledge(Local): 1
+Swim: 1
+Appraise: 1
+Climb: 1
+Sense Motive: 1
+Knowledge(Dungeoneering): 1
+Knowledge(Planar): 1
+Martial Lore: 1
+Profession: 1
+Knowledge(History): 1
+Knowledge(Arcana): 1
+Autohypnosis: 1
+Knowledge(Geography): 1
+Linguistics: 1
+ENDSKILLS
+
+Special: 
+Defensive Training
+Illusion Resistance
+Keen Senses
+Obsessed
+Gnome Magic
+Hatred
+Gnome Weapon Familiarity
+Low-Light Vision
+Wild Surge +5
+Psychic Enervation
+Elude Touch
+Surging Euphoria +2
+Expanded Knowledge
+Expanded Knowledge
+Expanded Knowledge
+ENDSPECIAL
+
+Feats: 
+Lunge
+Chain Power
+Quicken Power
+Improvised Weapon Mastery
+Fleet
+Maximize Power
+Improved Critical
+Update Power
+Empower Power
+ENDFEATS
+
+Equipment: {'Armor': '+4 Studded Leather Armor', 'Off Hand': '+0 Hand', 'Main Hand': '+5 Dagger'}
+
+Languages: ['Common', 'Gnome', 'Draconic']
+
+Tags: set(['Light Armor', 'Psionic'])

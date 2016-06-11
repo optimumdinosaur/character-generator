@@ -1,0 +1,146 @@
+Name
+LV16# RACEDwarf$ CLASSBard%
+HP: 112
+Ability Scores
+Str 11 (0)
+Dex 15 (2)
+Con 15 (2)
+Int 8 (-1)
+Wis 12 (1)
+Cha 17 (3)
+
+Armor Class 19	(Touch 12 / Flat-Footed 17)
+Fort +7
+Ref +12
+Will +11
+BAB +12
+
+Spells per Day: [6, 6, 6, 4, 3, 1]
+Spells Known: 
+Prestidigitation (0)
+Spark (0)
+Summon Instrument (0)
+Mage Hand (0)
+Open/Close (0)
+Lullaby (0)
+ Horn of Pursuit (1)
+Lock Gaze (1)
+Cause Fear (1)
+Negative Reaction (1)
+Charm Person (1)
+See Alignment (1)
+Enter Image (2)
+Blood Biography (2)
+Distressing Tone (2)
+Determine Depth (2)
+Daze Monster (2)
+Delay Poison (2)
+Raging Rubble (3)
+Purging Finale (3)
+Adjustable Disguise (3)
+Aura of the Unremarkable (3)
+Cure Critical Wounds (4)
+Wall of Sound (4)
+Primal Scream (4)
+Wall of Blindness/Deafness (4)
+Treasure Stitching (4)
+Foe to Friend (5)
+Phantasmal Web (5)
+Death Pact (5)
+Nightmare (5)
+Project Image (6)
+Find the Path (6)
+ENDSPELLS
+
+Skills: 
+Escape Artist: 21
+Climb: 19
+Sense Motive: 19
+Knowledge(Arcana): 18
+Linguistics: 18
+Bluff: 4
+Disguise: 4
+Handle Animal: 4
+Diplomacy: 4
+Perform: 4
+Use Psionic Device: 4
+Use Magic Device: 4
+Intimidate: 4
+Ride: 2
+Sleight of Hand: 2
+Acrobatics: 2
+Disable Device: 2
+Stealth: 2
+Fly: 2
+Survival: 0
+Heal: 0
+Perception: 0
+Swim: 0
+Profession: 0
+Autohypnosis: 0
+Knowledge(Nature): -1
+Psicraft: -1
+Knowledge(Psionics): -1
+Craft: -1
+Knowledge(Religion): -1
+Knowledge(Nobility): -1
+Knowledge(Engineering): -1
+Spellcraft: -1
+Knowledge(Local): -1
+Appraise: -1
+Knowledge(Dungeoneering): -1
+Knowledge(Planar): -1
+Martial Lore: -1
+Knowledge(History): -1
+Knowledge(Geography): -1
+ENDSKILLS
+
+Special: 
+Defensive Training
+Hardy
+Stability
+Greed
+Stonecunning
+Darkvision 60
+Hatred
+Dwarven Weapon Familiarity
+Bardic Knowledge
+Bardic Performance
+Cantrips
+Countersong
+Distraction
+Fascinate
+Inspire Courage +3
+Versatile Performance
+Well-Versed
+Inspire Competence +5
+Lore Master 2/day
+Suggestion
+Versatile Performance
+Dirge of Doom
+Inspire Greatness
+Jack-of-All-Trades
+Versatile Performance
+Soothing Performance
+Frightening Tune
+Versatile Performance
+Inspire Heroics
+ENDSPECIAL
+
+Feats: 
+Improvised Weapon Mastery
+Lunge
+Strike Back
+Fleet
+Quick Draw
+Vital Strike
+Toughness
+Improved Vital Strike
+Improved Initiative
+ENDFEATS
+
+Equipment: {'Armor': '+4 Studded Leather Armor', 'Off Hand': '+0 Hand', 'Main Hand': '+5 Blunderbuss'}
+
+Languages: ['Common', 'Dwarven']
+
+Tags: set(['Spontaneous', 'Light Armor', 'Arcane', 'Spellcaster', 'Sneaky'])
